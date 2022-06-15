@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'channels',
     "corsheaders",
     'rest_framework',
-    'chat.apps.ChatConfig',
+    'chat',
 
     'django.contrib.admin',
     'django.contrib.auth',
