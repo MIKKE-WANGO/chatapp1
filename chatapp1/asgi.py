@@ -14,10 +14,12 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'chatapp1.settings')
 
 from channels.routing import ProtocolTypeRouter, URLRouter
 from django.core.asgi import get_asgi_application
+
+application = get_asgi_application()
+
 import chat.routing
 from  .middleware import TokenAuthMiddleware
 
-application = get_asgi_application()
 
 
 application = ProtocolTypeRouter({
