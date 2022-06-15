@@ -87,14 +87,24 @@ WSGI_APPLICATION = 'chatapp1.wsgi.application'
 ASGI_APPLICATION = 'chatapp1.asgi.application'
 
 
+#CHANNEL_LAYERS = {
+#   'default': {
+#       'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#       'CONFIG': {
+#       },
+#   },
+#}
+
+
 CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
         },
     },
 }
+
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
@@ -107,6 +117,12 @@ DATABASES = {
         'HOST': 'localhost'
     }
 }
+
+
+#use db provided by heroku
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
 
 
 # Password validation
