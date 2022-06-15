@@ -3,13 +3,8 @@ from rest_framework_simplejwt.tokens import UntypedToken
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from jwt import decode as jwt_decode
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from urllib.parse import parse_qs
-from django.contrib.auth.models import AnonymousUser
-from asgiref.sync import sync_to_async
 
-
-User = get_user_model()
 
 class TokenAuthMiddleware:
     """
