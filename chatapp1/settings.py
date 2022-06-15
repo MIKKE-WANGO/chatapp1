@@ -31,12 +31,17 @@ SECRET_KEY = 'django-insecure-y8-lr62*4r6z3^)*e+2s#54l_p04cn*ag=sot0(3*te@yl6p1*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://chat-wango.herokuapp.com/']
+ALLOWED_HOSTS = ['chat-wango.herokuapp.com/']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
+    "corsheaders",
+    'rest_framework',
+    'chat.apps.ChatConfig',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,10 +49,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
-    'channels',
-    "corsheaders",
-    'rest_framework',
-    'chat.apps.ChatConfig',
 ]
 
 MIDDLEWARE = [
