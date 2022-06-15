@@ -16,7 +16,7 @@ const Requests = (props) => {
     
 
     async function getrequests() {
-        let response = await fetch(`http://127.0.0.1:8000/chat/requests`, {
+        let response = await fetch(`https://chat-wango.herokuapp.com/chat/requests`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ const Requests = (props) => {
     }
 
     async function acceptRequest(id) {
-        let response = await fetch(`http://127.0.0.1:8000/chat/requests`, {
+        let response = await fetch(`https://chat-wango.herokuapp.com/chat/requests`, {
 
             method: 'PUT',
             headers: {

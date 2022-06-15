@@ -19,7 +19,7 @@ const Sidepanel = (props) => {
     const user = localStorage.getItem('user')
      
     async function getChats() {
-        let response = await fetch(`http://127.0.0.1:8000/chat/list/${user}`, {
+        let response = await fetch(`https://chat-wango.herokuapp.com/chat/list/${user}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

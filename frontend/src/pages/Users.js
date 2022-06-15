@@ -20,7 +20,7 @@ const Users = (props) => {
     
       
     async function getUsers() {
-        let response = await fetch(`http://127.0.0.1:8000/chat/users`, {
+        let response = await fetch(`https://chat-wango.herokuapp.com/chat/users`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -34,7 +34,7 @@ const Users = (props) => {
     }
 
     async function createRequest(to) {
-        let response = await fetch(`http://127.0.0.1:8000/chat/requests`, {
+        let response = await fetch(`https://chat-wango.herokuapp.com/chat/requests`, {
 
             method: 'POST',
             headers: {
@@ -68,7 +68,7 @@ const Users = (props) => {
     }
 
     async function searchUsers(query) {
-        let response = await fetch(`http://127.0.0.1:8000/chat/users`, {
+        let response = await fetch(`https://chat-wango.herokuapp.com/chat/users`, {
 
             method: 'POST',
             headers: {

@@ -47,7 +47,7 @@ const Register = () => {
 
   const signup= async  (formData) => {
   
-    let response = await fetch('http://127.0.0.1:8000/chat/register', {
+    let response = await fetch('https://chat-wango.herokuapp.com/chat/register', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
