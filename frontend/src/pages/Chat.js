@@ -10,7 +10,7 @@ const Chat = (props) => {
 
   const chatUrl = useParams(props.id)
   const username = useParams(props.username)
-  const [socketUrl, setSocketUrl] = useState(`wss//chat-wango.herokuapp.com/ws/chat/${chatUrl.id}/`);
+  const [socketUrl, setSocketUrl] = useState(`wss://chat-wango.herokuapp.com/ws/chat/${chatUrl.id}/`);
   const [messageHistory, setMessageHistory] = useState([]);
 
   const user = localStorage.getItem("user")
@@ -40,7 +40,7 @@ const Chat = (props) => {
   useEffect(() => {
       
     
-    setSocketUrl(`wss://chat-wango.herokuapp.com//ws/chat/${chatUrl.id}/`)
+    setSocketUrl(`wss://chat-wango.herokuapp.com/ws/chat/${chatUrl.id}/`)
   }, [chatUrl,readyState]);
 
   
