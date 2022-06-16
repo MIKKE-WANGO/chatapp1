@@ -118,6 +118,12 @@ class ChatListView(ListAPIView):
         if username is not None :
             user = get_object_or_404(User, username=username)
             
+            if user != request.user:
+                return Response(
+                        {'error': 'Request already created'},
+                        status=status.HTTP_401_UNAUTHORIZED
+                    )
+
             querys = Chat.objects.all().order_by("-chat_updated")
             
             for query in querys:

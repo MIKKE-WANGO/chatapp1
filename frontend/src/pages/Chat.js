@@ -10,15 +10,15 @@ const Chat = (props) => {
 
   const chatUrl = useParams(props.id)
   const username = useParams(props.username)
-  const [socketUrl, setSocketUrl] = useState(`wss://chat-wango.herokuapp.com/ws/chat/${chatUrl.id}/`);
+  const [socketUrl, setSocketUrl] = useState(`wss//chat-wango.herokuapp.com/ws/chat/${chatUrl.id}/`);
   const [messageHistory, setMessageHistory] = useState([]);
 
   const user = localStorage.getItem("user")
   const [text, setText] = useState("")
 
   const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(socketUrl+"?token=" + localStorage.getItem('access'), {
-    onOpen: () => {  setMessageHistory([]); sendJsonMessage({command:'fetch_messages', chatId:chatUrl.id});  } ,
-    onClose: () =>setMessageHistory([]) ,
+    onOpen: () =>  sendJsonMessage({command:'fetch_messages', chatId:chatUrl.id}) ,
+    onClose: () => console.log('closed') ,
     share: true,
 
     //Will attempt to reconnect on all close events, such as server shutting down
@@ -27,18 +27,20 @@ const Chat = (props) => {
 
   useEffect(() => {
     if (lastJsonMessage !== null ) 
-      if(lastJsonMessage.messages != messageHistory) {
-      
+      if(lastJsonMessage.to == 'all') {
+        
         setMessageHistory((prev) => prev.concat(lastJsonMessage.messages));
-    
-    } 
+      }
+      else{
+        setMessageHistory(lastJsonMessage.messages)
+      }
   
   }, [lastJsonMessage,]);
 
   useEffect(() => {
       
     
-    setSocketUrl(`wss://chat-wango.herokuapp.com/ws/chat/${chatUrl.id}/`)
+    setSocketUrl(`wss://chat-wango.herokuapp.com//ws/chat/${chatUrl.id}/`)
   }, [chatUrl,readyState]);
 
   
@@ -89,7 +91,7 @@ const Chat = (props) => {
                 <span className="online_icon"></span>
               </div>
               <div className="user_info">
-                <span>Chat with {username.username}</span>
+                <span>{username.username}</span>
                 <p></p>
 
                 

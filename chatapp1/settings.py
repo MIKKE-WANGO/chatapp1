@@ -31,7 +31,7 @@ SECRET_KEY = 'django-insecure-y8-lr62*4r6z3^)*e+2s#54l_p04cn*ag=sot0(3*te@yl6p1*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['chat-wango.herokuapp.com']
+ALLOWED_HOSTS = ['chat-wango.herokuapp.com','127.0.0.1']
 
 
 # Application definition
@@ -87,23 +87,24 @@ WSGI_APPLICATION = 'chatapp1.wsgi.application'
 ASGI_APPLICATION = 'chatapp1.asgi.application'
 
 
-#CHANNEL_LAYERS = {
-#   'default': {
-#       'BACKEND': 'channels_redis.core.RedisChannelLayer',
-#       'CONFIG': {
-#       },
-#   },
-#}
-
-
 CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
-        },
-    },
+   'default': {
+       'BACKEND': 'channels_redis.core.RedisChannelLayer',
+       'CONFIG': {
+           "hosts": [('127.0.0.1', 6379)],
+       },
+   },
 }
+
+
+#CHANNEL_LAYERS = {
+#    "default": {
+ ##       "BACKEND": "channels_redis.core.RedisChannelLayer",
+ #       "CONFIG": {
+#            "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
+#        },
+ #   },
+#}
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases

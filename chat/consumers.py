@@ -1,7 +1,5 @@
 
-from email import message
 import json
-from operator import contains
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from django.shortcuts import get_object_or_404
@@ -16,15 +14,30 @@ User = get_user_model()
 def last_10_messages(chatId):
         chat = get_object_or_404(Chat, id=chatId)
         return chat.message_set.all().order_by("timestamp").all()[:10]
-   
+
+#see if user is a member of the chat
+def auth_test(chatId,user_id):
+    chat = get_object_or_404(Chat, id=chatId)
+    user = User.objects.get(id=user_id)
+
+    if chat.user1 == user:
+        return True
+    elif chat.user2 == user:
+        return True
+    else:
+        return False
+    
+
 class ChatConsumer(WebsocketConsumer):
 
+    user_id = None
 
     
     def fetch_messages(self, data):
         messages = last_10_messages(data['chatId'])
         content = {
-            'messages': self.messages_to_json(messages)
+            'messages': self.messages_to_json(messages),
+            'to':'user'
         }
         self.send_chat_message(content)
 
@@ -53,7 +66,8 @@ class ChatConsumer(WebsocketConsumer):
         chat.save()
 
         content = {
-            'messages': [self.message_to_json(message)]
+            'messages': [self.message_to_json(message)],
+            'to':'all'
         }
         return self.send_chat_message(content)
     
@@ -64,20 +78,25 @@ class ChatConsumer(WebsocketConsumer):
     }
 
     def connect(self):
-        user = self.scope['user']
+        user_id = self.scope['user']
        
-        if user == 'AnonymousUser':
+        if user_id == 'AnonymousUser':
             
             self.close()
         else:
             self.room_name = self.scope['url_route']['kwargs']['id']
             self.room_group_name = 'chat_%s' % self.room_name
             # Join room group
-            async_to_sync(self.channel_layer.group_add)(
-                self.room_group_name,
-                self.channel_name
-            )
-            self.accept()
+            if auth_test(self.room_name, user_id):
+
+                async_to_sync(self.channel_layer.group_add)(
+                    self.room_group_name,
+                    self.channel_name
+                )
+                self.accept()
+            else:
+                 self.close()
+
 
     def disconnect(self, close_code):
         # Leave room group
@@ -99,7 +118,8 @@ class ChatConsumer(WebsocketConsumer):
             self.room_group_name,
             {
                 'type': 'chat_message',
-                'message': message
+                'message': message,
+                
             }
         )
 

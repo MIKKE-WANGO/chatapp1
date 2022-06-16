@@ -63,9 +63,10 @@ const Register = () => {
       setAccountCreated(false)
 
       if( data.error === 'User with this email already exists'){
-        return console.log('not signed up')    
+        return console.log('user already exists')    
       
         } 
+      alert('not signed up')
 
         
     } else {
