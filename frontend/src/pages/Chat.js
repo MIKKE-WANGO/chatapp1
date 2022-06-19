@@ -88,7 +88,7 @@ const Chat = (props) => {
           <div className="card-header msg_head">
             <div className="d-flex bd-highlight">
               <div className="img_cont" >
-                <Link style={{fontSize:'20px', color:'white', marginRight:'13px'}} to={"/chats"}><span><i className="fas fa-arrow-left"></i></span></Link>              
+                <Link style={{fontSize:'25px', color:'white', marginRight:'13px'}} to={"/chats"}><span><i className="fas fa-arrow-left"></i></span></Link>              
               </div>
 
               <div className="img_cont">
