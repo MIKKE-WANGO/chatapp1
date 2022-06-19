@@ -51,10 +51,11 @@ border-radius: 0 0 15px 15px !important;
   height: 60px !important;
   overflow-y: auto;
 }
-  .type_msg:focus{
-     box-shadow:none !important;
-       outline:0px !important;
+.type_msg:focus{
+    box-shadow:none !important;
+    outline:0px !important;
 }
+
 .attach_btn{
 border-radius: 15px 0 0 15px !important;
 background-color: rgba(0,0,0,0.3) !important;
@@ -133,10 +134,11 @@ flex-wrap: nowrap;
 }
 
 .user_info span{
-font-size: 20px;
+font-size: 17px;
 color: white;
 width: 45%
 }
+
 .user_info p{
 font-size: 10px;
 color: rgba(255,255,255,0.6);
@@ -158,6 +160,7 @@ margin-right: 50px;
   text-align: center;
  
 }
+
 .msg_cotainer_send{
   margin-right: 10px;
   
@@ -296,6 +299,24 @@ button:hover{
 #add{
   display: flex;
   width: 40%;
+}
+
+.add_intro{
+  margin-top: 30px;
+  text-align: center;
+  color: white;
+}
+.add_intro a{
+  text-decoration: none;
+  color: gold;
+  border: dotted 1.2px goldenrod;
+  padding: 1px 5px;
+}
+
+.add_intro a:hover{
+  color: #c23616;
+  color: goldenrod;
+  border: dotted 1.2px gold;
 }
 
 @media(max-width: 576px){

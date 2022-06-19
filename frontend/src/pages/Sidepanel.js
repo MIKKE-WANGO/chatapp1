@@ -10,6 +10,8 @@ import {
 const Sidepanel = (props) => {
 
     const [chats, setChats] = useState([])
+    const [empty, setEmpty] = useState(false)
+   
     
     useEffect(() => {
         getChats()
@@ -31,6 +33,14 @@ const Sidepanel = (props) => {
         let data = await response.json();       
         setChats(data);
         console.log(localStorage.getItem('qty'))
+        if (data.length === 0){
+            setEmpty(true)
+            
+        }   else {
+            setEmpty(false)
+        }
+        
+        
     }
 
     const chatWith = (chat) => {
@@ -89,23 +99,35 @@ const Sidepanel = (props) => {
 
     <div className="card-body contacts_body">
         <ul className="contacts">
-        {chats.map(chat =>
-            <Link to={`/Chat/${chat.id}/${chatWith(chat)}`} key={chat.id}>
-                <li className="active">
-                    <div className="d-flex bd-highlight">
-                        <div className="img_cont">
-                            <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" className="rounded-circle user_img"/>
-                            <span className="online_icon"></span>
-                        </div>
-                        <div className="user_info">
-                            <span>{chatWith(chat)} <br></br> <p>online</p> </span>
+            {empty
+                ?
+                    <div className='add_intro'>
+                        <Link to={"/users"}>Add Friends</Link>
                             
-                        </div>
+                        
+                        <p>To start chating with them</p>
                     </div>
-                </li>
-            </Link>
-        )}
-        
+                        
+                :
+                    <>
+                    {chats.map(chat =>
+                        <Link to={`/Chat/${chat.id}/${chatWith(chat)}`} key={chat.id}>
+                            <li className="active">
+                                <div className="d-flex bd-highlight">
+                                    <div className="img_cont">
+                                        <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" className="rounded-circle user_img"/>
+                                        <span className="online_icon"></span>
+                                    </div>
+                                    <div className="user_info">
+                                        <span>{chatWith(chat)} <br></br> <p>online</p> </span>
+                                        
+                                    </div>
+                                </div>
+                            </li>
+                        </Link>
+                    )}
+                    </>
+            }
         </ul>
     </div>
     <div className="card-footer"></div>
