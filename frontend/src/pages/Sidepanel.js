@@ -1,8 +1,7 @@
 import React from 'react'
 import { useState , useEffect} from 'react';
 import {
-    Link,
-    useLocation
+    Link
   } from "react-router-dom";
   
 
@@ -14,6 +13,7 @@ const Sidepanel = (props) => {
     
     useEffect(() => {
         getChats()
+        getrequests()
       }, []);
     
     const user = localStorage.getItem('user')
@@ -30,6 +30,7 @@ const Sidepanel = (props) => {
         });
         let data = await response.json();       
         setChats(data);
+        console.log(localStorage.getItem('qty'))
     }
 
     const chatWith = (chat) => {
@@ -41,6 +42,21 @@ const Sidepanel = (props) => {
         }
         return chatting
     }
+
+    async function getrequests() {
+        let response = await fetch(`https://chat-wango.herokuapp.com/chat/requests`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('access')}`,
+           
+            },
+        });
+        let data = await response.json();       
+        localStorage.setItem("qty", data.length)
+       
+      }
 
     
   return (
@@ -60,7 +76,7 @@ const Sidepanel = (props) => {
                 <Link to={"/users"}>Add Friends</Link>
             </div>
             <div className='controlschild'>
-                <Link to={"/requests"}>Friend Requests</Link>
+                <Link to={"/requests"}>Friend Requests <span style={{color:'white'}}>{localStorage.getItem("qty")}</span></Link>
             </div>
             <div className='controlschild'>
                 <Link to={"/chats"}>Chats</Link>
@@ -82,8 +98,8 @@ const Sidepanel = (props) => {
                             <span className="online_icon"></span>
                         </div>
                         <div className="user_info">
-                            <span>{chatWith(chat)}</span>
-                            <p>online</p>
+                            <span>{chatWith(chat)} <br></br> <p>online</p> </span>
+                            
                         </div>
                     </div>
                 </li>

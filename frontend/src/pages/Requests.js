@@ -27,6 +27,8 @@ const Requests = (props) => {
         });
         let data = await response.json();       
         setrequests(data);
+        localStorage.setItem("qty", data.length)
+       
        
     }
 
@@ -64,7 +66,7 @@ const Requests = (props) => {
                         <Link to={"/users"}>Add Friends</Link>
                     </div>
                     <div className='controlschild'>
-                        <Link to={"/requests"}>Friend Requests</Link>
+                        <Link to={"/requests"}>Friend Requests {localStorage.getItem("qty")}</Link>
                     </div>
                     <div className='controlschild'>
                         <Link to={"/chats"}>Chats</Link>
@@ -87,7 +89,7 @@ const Requests = (props) => {
                                 </div>
                                 <div className="user_info">
                                     <span>{request.sent_by}</span>
-                                    <span id='add'><button onClick={() => acceptRequest(request.id)}>Accept</button></span>
+                                    <div id='add'><button onClick={() => acceptRequest(request.id)}>Accept</button></div>
                                     
                                 </div>
                             </div>

@@ -126,10 +126,16 @@ background-color: #c23616 !important;
 margin-top: auto;
 margin-bottom: auto;
 margin-left: 15px;
+display: flex;
+width: 100%;
+flex-wrap: nowrap;
+
 }
+
 .user_info span{
 font-size: 20px;
 color: white;
+width: 45%
 }
 .user_info p{
 font-size: 10px;
@@ -143,7 +149,7 @@ margin-top: 5px;
 color: white;
 font-size: 20px;
 cursor: pointer;
-margin-right: 20px;
+margin-right: 50px;
 }
 
 .msg_cotainer{
@@ -259,7 +265,7 @@ h1{
 }
 
 .controlschild{
-  width:45%;
+  width:48%;
   text-align: center;
   border: dotted 1.2px goldenrod;
   margin: 2px;
@@ -278,14 +284,18 @@ h1{
 
 button{
   background-color: #7F7FD5;
-  margin-left: 10px ;
-  font-size: 13px;
+  margin-left: 8px ;
+  font-size: 12px;
   cursor: pointer;
 }
 
+button:hover{
+  background-color: #5a5a6a;
+}
+
 #add{
-  position: absolute;
-  right: 4px;
+  display: flex;
+  width: 40%;
 }
 
 @media(max-width: 576px){

@@ -40,7 +40,7 @@ const Register = () => {
       
       signup(formData)
         } else {
-          alert("passwords dont match")
+          alert("passwords do not match")
       }
     
   };
@@ -63,11 +63,14 @@ const Register = () => {
       setAccountCreated(false)
 
       if( data.error === 'User with this email already exists'){
+        alert('User with this email already exists')
         return console.log('user already exists')    
-      
-        } 
-      alert('not signed up')
-
+    
+      } else if(data.error=='Password must be at least 6 characters long'){
+        alert('Password must be at least 6 characters long')
+      } else if(data.error =='Username already taken'){
+        alert('Username already taken')
+      }
         
     } else {
       setAccountCreated(true)

@@ -155,15 +155,19 @@ class GetUsers(APIView):
                 queryset.append(user)
         
         friends = Friends.objects.filter(user=current_user)
-      
+       
         for user in users:
              for friend in friends:
                 if(user == friend.friend):
-                    
-                    queryset.remove(user)
                    
+                    try:
+                        queryset.remove(user)
+                    except ValueError:
+                        
+                        pass
+
         
-        
+        print(queryset)
         serialize = UserSerializer(queryset, many=True)
         return Response(serialize.data)
 
@@ -176,7 +180,11 @@ class GetUsers(APIView):
         vector = SearchVector('username')
         query = SearchQuery(search)
 
-        users = User.objects.annotate( search=vector).filter(search=query)
+        users = []
+        if search == "":
+             users = User.objects.all()
+        else:
+            users = User.objects.annotate( search=vector).filter(search=query)
 
         for user in users:
             if(user != current_user):
@@ -187,8 +195,12 @@ class GetUsers(APIView):
         for user in users:
              for friend in friends:
                 if(user == friend.friend):                  
-                    queryset.remove(user)
-                   
+                    try:
+                        queryset.remove(user)
+                    except ValueError:
+                        
+                        pass
+
         
         
         queryset = UserSerializer(queryset, many=True)

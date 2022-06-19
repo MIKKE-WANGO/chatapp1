@@ -48,10 +48,12 @@ const Users = (props) => {
 
         
         if(!response.ok){
-            return alert('request already created') 
+            return alert('request already sent') 
         }
+
+
         console.log("request created")
-        window.alert("Request sent")
+        window.alert("Request sent. Wait for " + to + " to accept." )
         
     }
 
@@ -153,7 +155,7 @@ const Users = (props) => {
                                     </div>
                                     <div className="user_info">
                                         <span>{user.username}</span>
-                                        <span id='add'><button onClick={() => createRequest(user.username)}>Add friend</button></span>
+                                        <div id='add'><button onClick={() => createRequest(user.username)}>Add friend</button></div>
                                         
                                     </div>
                                 </div>

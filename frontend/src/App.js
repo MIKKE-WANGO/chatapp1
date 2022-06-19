@@ -13,17 +13,23 @@ import Register from "./pages/Register";
 import Requests from "./pages/Requests";
 import Sidepanel from "./pages/Sidepanel";
 import Users from "./pages/Users";
+import { useEffect,useState } from 'react'
+
 function App() {
 
- 
-
+  
   const logout = () => {
     localStorage.removeItem('access')
     localStorage.removeItem('refresh')
     localStorage.removeItem('user')
+    localStorage.removeItem("qty")
+       
     console.log("Logout success")
     
   }
+
+
+  
   return (
     <Router>
       <div className="container-fluid h-100" style={{marginTop:'50px'}}>
@@ -35,7 +41,7 @@ function App() {
             
             <Route path="/chats" element={<Sidepanel />}/>
             <Route path="/users" element={<Users logout={logout}/>}/>
-            <Route path="/requests" element={<Requests logout={logout}/>}/>
+            <Route path="/requests" element={<Requests logout={logout} />}/>
             <Route  path="/chat/:id/:username" element={<Chat logout={logout}/>}/>   
                     
             

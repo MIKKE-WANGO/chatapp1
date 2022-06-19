@@ -2,6 +2,9 @@ import React from 'react'
 import { useEffect,useState } from 'react'
 import Sidepanel from './Sidepanel'
 import useWebSocket, { ReadyState } from 'react-use-websocket';
+import {
+  Link
+} from "react-router-dom";
 
 
 import {  useParams } from "react-router-dom";
@@ -80,12 +83,14 @@ const Chat = (props) => {
   return (
 
     <>
-    <><Sidepanel newmessage={lastJsonMessage}/></>
-    
     <div className="col-md-8 col-xl-6 chat">
         <div className="card">
           <div className="card-header msg_head">
             <div className="d-flex bd-highlight">
+              <div className="img_cont" >
+                <Link style={{fontSize:'20px', color:'white'}} to={"/chats"}><span><i className="fas fa-arrow-left"></i></span></Link>              
+              </div>
+
               <div className="img_cont">
                 <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" className="rounded-circle user_img"/>
                 <span className="online_icon"></span>
@@ -94,12 +99,10 @@ const Chat = (props) => {
                 <span>{username.username}</span>
                 <p></p>
 
-                
-
               </div>
               <div className="video_cam">
                 <span><i className="fas fa-video"></i></span>
-                <span><i className="fas fa-phone"></i></span>
+                
               </div>
             </div>
             <span id="action_menu_btn"><i className="fas fa-ellipsis-v"></i></span>
