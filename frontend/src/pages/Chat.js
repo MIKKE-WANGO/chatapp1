@@ -88,7 +88,7 @@ const Chat = (props) => {
           <div className="card-header msg_head">
             <div className="d-flex bd-highlight">
               <div className="img_cont" >
-                <Link style={{fontSize:'20px', color:'white'}} to={"/chats"}><span><i className="fas fa-arrow-left"></i></span></Link>              
+                <Link style={{fontSize:'20px', color:'white', marginRight:'13px'}} to={"/chats"}><span><i className="fas fa-arrow-left"></i></span></Link>              
               </div>
 
               <div className="img_cont">
@@ -96,7 +96,7 @@ const Chat = (props) => {
                 <span className="online_icon"></span>
               </div>
               <div className="user_info">
-                <span>{username.username}</span>
+                <span style={{width:'100%'}}>{username.username}</span>
                 <p></p>
 
               </div>
