@@ -119,7 +119,7 @@ const Sidepanel = (props) => {
                                         <span className="online_icon"></span>
                                     </div>
                                     <div className="user_info">
-                                        <span>{chatWith(chat)} <br></br> <p>online</p> </span>
+                                        <span>{chatWith(chat)} <br></br> <p></p> </span>
                                         
                                     </div>
                                 </div>
