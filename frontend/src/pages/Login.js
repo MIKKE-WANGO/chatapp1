@@ -63,7 +63,9 @@ const Login = (props) => {
         if(!response.ok){
           localStorage.removeItem('access')
           localStorage.removeItem('refresh')
-            return console.log('not authorised') 
+          alert('Username or password is incorrrect')
+          return console.log('not authorised') 
+          
         }
     
         let data = await response.json()
