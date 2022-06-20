@@ -14,7 +14,7 @@ User = get_user_model()
 def last_15_messages(chatId):
         chat = get_object_or_404(Chat, id=chatId)
         #return chat.message_set.all().order_by("timestamp").all()[:10]
-        return chat.message_set.all().order_by("timestamp").all()[:15][::-1]
+        return chat.message_set.all().order_by("-timestamp").all()[:15][::-1]
 
 #see if user is a member of the chat
 def auth_test(chatId,user_id):
