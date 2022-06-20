@@ -11,9 +11,10 @@ User = get_user_model()
 
 
 
-def last_10_messages(chatId):
+def last_15_messages(chatId):
         chat = get_object_or_404(Chat, id=chatId)
-        return chat.message_set.all().order_by("timestamp").all()[:10]
+        #return chat.message_set.all().order_by("timestamp").all()[:10]
+        return chat.message_set.all().order_by("timestamp").all()[:15][::-1]
 
 #see if user is a member of the chat
 def auth_test(chatId,user_id):
@@ -34,7 +35,7 @@ class ChatConsumer(WebsocketConsumer):
 
     
     def fetch_messages(self, data):
-        messages = last_10_messages(data['chatId'])
+        messages = last_15_messages(data['chatId'])
         content = {
             'messages': self.messages_to_json(messages),
             'to':'user'

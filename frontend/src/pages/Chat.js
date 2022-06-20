@@ -1,5 +1,5 @@
 import React from 'react'
-import { useEffect,useState } from 'react'
+import { useEffect,useState, useRef } from 'react'
 import Sidepanel from './Sidepanel'
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import {
@@ -19,6 +19,9 @@ const Chat = (props) => {
   const user = localStorage.getItem("user")
   const [text, setText] = useState("")
 
+  const bottomRef = useRef(null);
+
+
   const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(socketUrl+"?token=" + localStorage.getItem('access'), {
     onOpen: () =>  sendJsonMessage({command:'fetch_messages', chatId:chatUrl.id}) ,
     onClose: () => console.log('closed') ,
@@ -35,7 +38,9 @@ const Chat = (props) => {
         setMessageHistory((prev) => prev.concat(lastJsonMessage.messages));
       }
       else{
+
         setMessageHistory(lastJsonMessage.messages)
+        
       }
   
   }, [lastJsonMessage,]);
@@ -47,6 +52,10 @@ const Chat = (props) => {
   }, [chatUrl,readyState]);
 
   
+  useEffect(() => {
+    // 👇️ scroll to bottom every time messages change
+    bottomRef.current?.scrollIntoView({behavior: 'smooth'});
+  }, [messageHistory]);
 
   
   
@@ -146,6 +155,7 @@ const Chat = (props) => {
                 </div>
             )}
                     
+            <div ref={bottomRef} />
             
           </div>
 
