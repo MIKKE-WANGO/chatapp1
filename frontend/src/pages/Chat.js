@@ -13,11 +13,13 @@ const Chat = (props) => {
 
   const chatUrl = useParams(props.id)
   const username = useParams(props.username)
-  const [socketUrl, setSocketUrl] = useState(`wss://chat-wango.herokuapp.com/ws/chat/${chatUrl.id}/`);
+  const [socketUrl, setSocketUrl] = useState(`wss://chat-wango.herokuapp.com//${chatUrl.id}/`);
   const [messageHistory, setMessageHistory] = useState([]);
 
   const user = localStorage.getItem("user")
   const [text, setText] = useState("")
+
+  const [status, setStatus] = useState("Offline")
 
   const bottomRef = useRef(null);
 
@@ -57,7 +59,15 @@ const Chat = (props) => {
     bottomRef.current?.scrollIntoView({behavior: 'smooth'});
   }, [messageHistory]);
 
-  
+  useEffect(() =>{
+    messageHistory.forEach(updateChat)
+  }, [messageHistory])
+
+  useEffect(() => {
+    const timer = setInterval(getStatus, 2000);
+    return () => clearInterval(timer);
+    //getStatus()
+  }, []);
   
 
   const connectionStatus = {
@@ -87,6 +97,55 @@ const Chat = (props) => {
     return new Date(note.timestamp).toLocaleTimeString() 
   }
 
+  async function updateChat(value) {
+    console.log(value.contact)
+    if (value.status === 'Unread' && value.contact != localStorage.getItem('user')){
+      let response = await fetch(`https://chat-wango.herokuapp.com/chat/messages`, {
+
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('access')}`,
+        
+          },
+          body: JSON.stringify({'id':value.id, 'chatId':value.chat})
+      });
+      if(!response.ok){
+          return console.log('unable to update chat') 
+      }
+    }
+    
+}
+
+const getStatus = async () => {
+  if (localStorage.getItem('access')){
+    let response = await fetch('https://chat-wango.herokuapp.com/chat/status', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',            
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('access')}`,
+     
+          },
+          body: JSON.stringify({'username':username.username})
+
+     })
+
+    let data = await response.json()
+
+    if(!response.ok){
+      console.log("unable to get user")
+     
+    }
+    setStatus(data.status)
+    return console.log("status accessed")
+    
+  } else {
+    console.log(" no access key")
+    return('offline')
+  }
+}
 
   
   return (
@@ -106,7 +165,7 @@ const Chat = (props) => {
               </div>
               <div className="user_info">
                 <span style={{width:'100%'}}>{username.username}</span>
-                <p></p>
+                <p>{status}</p>
 
               </div>
               <div className="video_cam">

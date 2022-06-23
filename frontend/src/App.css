@@ -129,20 +129,34 @@ background-color: #c23616 !important;
 margin-top: auto;
 margin-bottom: auto;
 margin-left: 15px;
-display: flex;
 width: 100%;
-flex-wrap: nowrap;
+position: relative;
+overflow: hidden;
 
 }
 
 .user_info span{
-font-size: 17px;
+font-size: 16px;
 color: white;
-width: 45%
+width: 60%;
+display: flex;
+position: relative;
+}
+
+.user_info span .count{
+  position: absolute;
+  right: 0;
+  background-color: #4cd137;
+  width: 20px;
+ 
+  color: black;
+  text-align: center;
+  border-radius: 50%;
+  height: 100%;
 }
 
 .user_info p{
-font-size: 10px;
+font-size: 13px;
 color: rgba(255,255,255,0.6);
 }
 
@@ -301,8 +315,10 @@ button:hover{
 }
 
 #add{
-  display: flex;
-  width: 40%;
+ 
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
 .add_intro{

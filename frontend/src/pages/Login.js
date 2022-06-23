@@ -103,6 +103,7 @@ const Login = (props) => {
           
 
           localStorage.setItem('user', data.user.username)
+          
           console.log("user accessed")
           setLoggedin(true)
         } else {
@@ -114,7 +115,7 @@ const Login = (props) => {
 
   return (
     <div> 
-        <Link to='/' onClick={props.logout}>Logout</Link>
+        <Link to='/' onClick={props.logout} >Logout</Link>
         <h1>Login</h1>
         <form onSubmit={e => onSubmit(e)} style={{margin:5}} >
             <div className="card-footer">

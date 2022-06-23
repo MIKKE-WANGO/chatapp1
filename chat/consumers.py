@@ -33,7 +33,6 @@ class ChatConsumer(WebsocketConsumer):
 
     user_id = None
 
-    
     def fetch_messages(self, data):
         messages = last_15_messages(data['chatId'])
         content = {
@@ -52,17 +51,19 @@ class ChatConsumer(WebsocketConsumer):
 
     def message_to_json(self, message):
         return{
+            'id':message.id,
             'contact':message.user.username,
             'content':message.content,
             'timestamp': str(message.timestamp),
-            'chat': message.chat.id
+            'chat': message.chat.id,
+            'status': message.status
         }
 
     def new_message(self, data):
         contact = data['from']
         user = User.objects.filter(username=contact)[0]
         chat = Chat.objects.get(id=data["chatId"])
-        message = Message.objects.create(user=user, content=data['message'], chat=chat )
+        message = Message.objects.create(user=user, content=data['message'], chat=chat, status='Unread' )
         chat.chat_updated = message.timestamp
         chat.save()
 
@@ -75,7 +76,8 @@ class ChatConsumer(WebsocketConsumer):
 
     commands = {
         'fetch_messages': fetch_messages,
-        'new_message': new_message
+        'new_message': new_message,
+        
     }
 
     def connect(self):
@@ -85,9 +87,14 @@ class ChatConsumer(WebsocketConsumer):
             
             self.close()
         else:
+
+
+
             self.room_name = self.scope['url_route']['kwargs']['id']
             self.room_group_name = 'chat_%s' % self.room_name
             # Join room group
+
+            
             if auth_test(self.room_name, user_id):
 
                 async_to_sync(self.channel_layer.group_add)(
@@ -134,3 +141,33 @@ class ChatConsumer(WebsocketConsumer):
 
         # Send message to WebSocket
         self.send(text_data=json.dumps(message))
+
+class  OnlineConsumer(WebsocketConsumer):
+    user_id = ''
+    user = ''
+    def connect(self):
+        user_id = self.scope['user']
+       
+        if user_id == 'AnonymousUser':
+            
+            self.close()
+        else:
+            
+            user = User.objects.get(id=user_id)
+            user.status = 'Online'
+            user.save()
+            print('online')
+            self.accept()
+
+    def receive(self, text_data=None, bytes_data=None):
+        pass
+
+    def disconnect(self, close_code):
+        user_id = self.scope['user']
+       
+        user = User.objects.get(id=user_id)
+
+        user.status = 'Offline'
+        user.save()
+        print('offline')
+

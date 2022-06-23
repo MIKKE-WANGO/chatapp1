@@ -13,11 +13,17 @@ const Sidepanel = (props) => {
     const [empty, setEmpty] = useState(false)
    
     
+   
     useEffect(() => {
-        getChats()
-        getrequests()
+        const timer = setInterval(getChats, 1000);
+        return () => clearInterval(timer);
       }, []);
     
+    useEffect(() => {
+        const timer = setInterval(getrequests, 2000);
+        return () => clearInterval(timer);
+      }, []);
+
     const user = localStorage.getItem('user')
      
     async function getChats() {
@@ -30,6 +36,7 @@ const Sidepanel = (props) => {
            
             },
         });
+
         let data = await response.json();       
         setChats(data);
         console.log(localStorage.getItem('qty'))
@@ -67,6 +74,17 @@ const Sidepanel = (props) => {
         localStorage.setItem("qty", data.length)
        
       }
+
+      let getContent = (message) => {
+        
+        //Slice content and add three dots in over 45 characters to show there is more
+        if (message.length > 10) {
+            return message.slice(0, 25) + '...'
+        } else {
+            return message
+        }
+    
+    }
 
     
   return (
@@ -119,8 +137,33 @@ const Sidepanel = (props) => {
                                         <span className="online_icon"></span>
                                     </div>
                                     <div className="user_info">
-                                        <span>{chatWith(chat)} <br></br> <p></p> </span>
+                                        { chat.count>0
+                                        ?
+                                        <>
+                                        <span style={{width:'100%'}}>{chatWith(chat)}  <div className='count'>{chat.count}</div>  </span>
+                                        <p>{getContent(chat.latest)}</p>
+                                        </>
+                                        :
+                                        <>
+                                        <span style={{width:'100%'}}>{chatWith(chat)}</span>
+                                        { chat.sent === localStorage.getItem('user')
+                                            ?
+                                            <>
+                                            { chat.status === 'Unread' ?
+                                            <p>{<i className="fas fa-check-double" style={{fontSize:'10px', marginRight:'5px',color:'grey'}}></i>}{getContent(chat.latest)}</p>
+                                            :
+                                            <p>{<i className="fas fa-check-double" style={{fontSize:'10px', marginRight:'5px',color:'skyblue'}}></i>}{getContent(chat.latest)}</p>
+                                           
+                                            }
+                                            </>
+                                            :
+                                            <p>{getContent(chat.latest)}</p>
+   
+                                        }
+                                        </>
                                         
+                                        
+                                        }
                                     </div>
                                 </div>
                             </li>

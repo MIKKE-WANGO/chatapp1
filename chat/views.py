@@ -1,6 +1,7 @@
 
 
 # Create your views here.
+from email import message
 from django.shortcuts import get_object_or_404
 
 from .serializers import ChatSerializer
@@ -113,14 +114,15 @@ class RetrieveUserView(APIView):
 class ChatListView(ListAPIView):
   
     def get(self,request, username):
-        
+        user = request.user
+
         queryset = []
         if username is not None :
             user = get_object_or_404(User, username=username)
             
             if user != request.user:
                 return Response(
-                        {'error': 'Request already created'},
+                        {'error': 'Unauthorized'},
                         status=status.HTTP_401_UNAUTHORIZED
                     )
 
@@ -134,7 +136,28 @@ class ChatListView(ListAPIView):
         for query in queryset:
             username1=query.user1.username
             username2 = query.user2.username
-            chats.append({"id":query.id, "chat_updated":query.chat_updated, "user1":username1, "user2":username2})
+            unread_user = ''
+            if(query.user1 != user):
+                unread_user = query.user1
+            else:
+                unread_user = query.user2
+
+            unread_count = Message.objects.filter(chat=query, status='Unread', user=unread_user).count()
+            try:
+                last_message = Message.objects.filter(chat=query).latest("timestamp")
+                sent_by = last_message.user.username
+                status = last_message.status
+                last_message = last_message.content
+           
+          
+            except:
+                last_message = ''
+
+                sent_by = ''
+                status = ''
+                last_message = ''
+            
+            chats.append({"id":query.id, "chat_updated":query.chat_updated, "user1":username1, "user2":username2, 'count':unread_count, 'latest':last_message, 'status':status, 'sent':sent_by})
         
         return Response(chats)
 
@@ -208,6 +231,8 @@ class GetUsers(APIView):
             {'users': queryset.data},
             status=status.HTTP_200_OK
         )
+
+
    
 class HandleRequests(APIView):
     def get(self, request):
@@ -237,11 +262,11 @@ class HandleRequests(APIView):
                             status=status.HTTP_400_BAD_REQUEST
                         )
 
-        return Response(
-                            {'success': ' Request updated '},
-                            status=status.HTTP_200_OK
-                        )
-      
+            return Response(
+                                {'success': ' Request updated '},
+                                status=status.HTTP_200_OK
+                            )
+        
        
     def put(self,request):
         data = request.data
@@ -265,3 +290,39 @@ class HandleRequests(APIView):
                             status=status.HTTP_200_OK
                         )
       
+
+class UpdateMessage(APIView):
+    
+
+    def post(self, request):
+        data = request.data
+        id = data['id']
+        chatId = data['chatId']
+        user = request.user
+        chat = Chat.objects.get(id=chatId)
+
+        if user == chat.user1 or chat.user2:
+            message = Message.objects.get(id=id,chat=chat)
+            message.status = 'Read'
+            message.save()
+
+            return Response(
+                            {'success': ' Message updated '},
+                            status=status.HTTP_200_OK
+                        )
+        
+        else:
+            return Response(
+                            {'error': 'Unauthorized'},
+                            status=status.HTTP_401_UNAUTHORIZED
+                        )
+
+class GetStatus(APIView):
+    def post(self, request):
+        data = request.data
+        username = data['username']
+
+        user = User.objects.get(username=username)
+        status = user.status
+
+        return Response({'status':status})

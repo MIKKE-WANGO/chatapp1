@@ -42,11 +42,17 @@ class UserAccountManager(BaseUserManager):
 
     
 class UserAccount(AbstractBaseUser, PermissionsMixin):
-
+    class Status(models.TextChoices):
+        ONLINE = 'Online'
+        OFFLINE = 'Offline'
+    
     #i can add any other fields i would want a user to have such as phone number
     email = models.EmailField(max_length=255, unique=True)
     username = models.CharField(max_length=255,  unique=True)
     
+    status =  models.CharField(max_length=20, choices=Status.choices, default=Status.OFFLINE)
+    
+
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
@@ -81,11 +87,16 @@ class Chat(models.Model):
 
 
 class Message(models.Model):
+    class Status(models.TextChoices):
+        READ = 'Read'
+        UNREAD = 'Unread'
+        
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
-
+    status = models.CharField(max_length=20, choices=Status.choices, default=Status.UNREAD)
+    
     def __str__(self):
        return  "{}".format(self.pk)
 
