@@ -8,6 +8,7 @@ import {
 
 import './App.css';
 import Chat from "./pages/Chat";
+import Video from "./pages/Video";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Requests from "./pages/Requests";
@@ -26,20 +27,25 @@ function App() {
     //onOpen: () =>  sendJsonMessage({command:'connect', username:localStorage.getItem('user')}) ,
     //onClose: () => console.log('closed') ,
     share: true,
+    reconnectAttempts: 50,
+    reconnectInterval: 6000,
 
     //Will attempt to reconnect on all close events, such as server shutting down
     shouldReconnect: (closeEvent) => true,
   });
 
 
-  const logout = () => {
+  const logout = (out) => {
     localStorage.removeItem('access')
     localStorage.removeItem('refresh')
     localStorage.removeItem('user')
     localStorage.removeItem("qty")
-       
-    console.log("Logout success")
-    //setSocketUrl(null)
+    localStorage.removeItem('userid')
+    
+    if (out === 'null'){  
+      setSocketUrl(null)
+      console.log("Logout success")
+    }
   }
 
 
@@ -53,11 +59,14 @@ function App() {
             <Route path="/" element={<Login logout={logout} setSocketUrl={setSocketUrl}/>}/>
             <Route path="/register" element={<Register/> }/>
             
-            <Route path="/chats" element={<Sidepanel />}/>
+            <Route path="/chats" element={<Sidepanel logout={logout} />}/>
+
+            
             <Route path="/users" element={<Users logout={logout} setSocketUrl={setSocketUrl}/> }/>
             <Route path="/requests" element={<Requests logout={logout} setSocketUrl={setSocketUrl}/>}/>
             <Route  path="/chat/:id/:username" element={<Chat logout={logout} setSocketUrl={setSocketUrl}/>}/>   
-                    
+            <Route path="/video/:id/:username" element={<Video logout={logout} />}/>
+            
             
           </Routes>  
         </div>      

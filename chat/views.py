@@ -2,6 +2,7 @@
 
 # Create your views here.
 from email import message
+import time
 from django.shortcuts import get_object_or_404
 
 from .serializers import ChatSerializer
@@ -39,6 +40,9 @@ from django.utils.timezone import make_aware
 from django.core.mail import send_mail
 
 from django.contrib.postgres.search import SearchQuery,  SearchVector
+
+from agora_token_builder import RtcTokenBuilder
+
 
 class RegisterView(APIView):
     permission_classes = (permissions.AllowAny,)
@@ -321,8 +325,35 @@ class GetStatus(APIView):
     def post(self, request):
         data = request.data
         username = data['username']
-
+    
         user = User.objects.get(username=username)
         status = user.status
 
         return Response({'status':status})
+
+class GetToken(APIView):
+    def post(self, request):
+
+        data = request.data
+        chatId = data['chatId']
+        chat = Chat.objects.get(id=chatId)
+        user = request.user
+
+        if user == chat.user1 or chat.user2:
+            appId = '8d68b0c915984803a4a86ffffb0e49d2'
+            appCertificate = '651ee335b60048fbae67912c57f8b1dc'
+            channelName = chatId
+
+            uid = user.id
+            expirationTimeInSeconds = 3600 * 24
+            currentTimeStamp = time.time()
+            privilegeExpiredTs = currentTimeStamp + expirationTimeInSeconds
+            role = 1
+
+            token = RtcTokenBuilder.buildTokenWithUid(appId, appCertificate, channelName, uid, role, privilegeExpiredTs)
+            return Response({'token':token, 'uid':uid})
+        else:
+            return Response(
+                            {'error': 'Unauthorized'},
+                            status=status.HTTP_401_UNAUTHORIZED
+                        )

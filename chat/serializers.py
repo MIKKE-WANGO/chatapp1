@@ -10,7 +10,7 @@ User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ( "username",)
+        fields = ( "username", 'id',)
 
 class ChatSerializer(serializers.ModelSerializer):
     class Meta:

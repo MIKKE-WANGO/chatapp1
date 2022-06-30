@@ -103,7 +103,7 @@ const Login = (props) => {
           
 
           localStorage.setItem('user', data.user.username)
-          
+          localStorage.setItem('userid', data.user.id)
           console.log("user accessed")
           setLoggedin(true)
         } else {

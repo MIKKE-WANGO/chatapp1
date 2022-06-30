@@ -13,11 +13,16 @@ const Chat = (props) => {
 
   const chatUrl = useParams(props.id)
   const username = useParams(props.username)
-  const [socketUrl, setSocketUrl] = useState(`wss://chat-wango.herokuapp.com//${chatUrl.id}/`);
+  const [socketUrl, setSocketUrl] = useState(`wss://chat-wango.herokuapp.com/ws/chat/${chatUrl.id}/`);
   const [messageHistory, setMessageHistory] = useState([]);
 
   const user = localStorage.getItem("user")
   const [text, setText] = useState("")
+  
+  
+  const [typing, setTyping] = useState(false)
+  
+  const [calling, setCalling] = useState(false)
 
   const [status, setStatus] = useState("Offline")
 
@@ -39,10 +44,22 @@ const Chat = (props) => {
         
         setMessageHistory((prev) => prev.concat(lastJsonMessage.messages));
       }
-      else{
+      else if(lastJsonMessage.to == 'user'){
 
         setMessageHistory(lastJsonMessage.messages)
         
+      } 
+
+      else if(lastJsonMessage.to == 'calling' && lastJsonMessage.user != user){
+        if(calling === false){
+          setCalling(true)
+          console.log('calling')
+        }
+      }
+      else if(lastJsonMessage.to == 'typing' && lastJsonMessage.user != user ){
+        if(typing === false){
+          setTyping(true)
+        }
       }
   
   }, [lastJsonMessage,]);
@@ -66,9 +83,36 @@ const Chat = (props) => {
   useEffect(() => {
     const timer = setInterval(getStatus, 2000);
     return () => clearInterval(timer);
-    //getStatus()
+    getStatus()
   }, []);
+
+  useEffect(() => {
+    
+    callTimer()
+  }, [calling]);
+
+  useEffect(() => {
+    
+    typingTimer()
+  }, [typing]);
+
+
   
+  const callTimer = () => {
+    setTimeout(() => {
+      setCalling(false)
+    }, 10000);
+   
+  }
+
+  const typingTimer = () => {
+    if(typing === true){
+      setTimeout(() => {
+        setTyping(false)
+      }, 1500);
+  }
+   
+  }
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: 'Connecting',
@@ -81,7 +125,8 @@ const Chat = (props) => {
 
   const onChange = (e) => {
     setText( e.target.value)
-   
+    sendJsonMessage({command:'typing', from:user, chatId:chatUrl.id}) 
+    
   }
 
 
@@ -98,7 +143,7 @@ const Chat = (props) => {
   }
 
   async function updateChat(value) {
-    console.log(value.contact)
+    
     if (value.status === 'Unread' && value.contact != localStorage.getItem('user')){
       let response = await fetch(`https://chat-wango.herokuapp.com/chat/messages`, {
 
@@ -165,23 +210,18 @@ const getStatus = async () => {
               </div>
               <div className="user_info">
                 <span style={{width:'100%'}}>{username.username}</span>
-                <p>{status}</p>
+                {typing 
+                  ?
+                    <p>typing...</p>
+                  : <p>{status}</p>}
 
               </div>
               <div className="video_cam">
-                <span><i className="fas fa-video"></i></span>
+                <span><Link style={{color:'white'}}to={`/video/${chatUrl.id}/${username.username}`}><i className="fas fa-video"></i></Link></span>
                 
               </div>
             </div>
-            <span id="action_menu_btn"><i className="fas fa-ellipsis-v"></i></span>
-            <div className="action_menu">
-              <ul>
-                <li><i className="fas fa-user-circle"></i> View profile</li>
-                <li><i className="fas fa-users"></i> Add to close friends</li>
-                <li><i className="fas fa-plus"></i> Add to group</li>
-                <li><i className="fas fa-ban"></i> Block</li>
-              </ul>
-            </div>
+           
           </div>
 
           
@@ -208,7 +248,7 @@ const getStatus = async () => {
                   <div className="msg_cotainer">
                       <div className='text'>{message.content}</div>
                       <span className="msg_time">{getDate(message)}</span>
-                      <span className="msg_time_send">{new Date(message.timestamp).toLocaleDateString()}</span>
+                      <span className="msg_time">{new Date(message.timestamp).toLocaleDateString()}</span>
                
                   </div>
                 </div>

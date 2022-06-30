@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState , useEffect} from 'react';
 import {
-    Link
+    Link,useNavigate
   } from "react-router-dom";
   
 
@@ -17,11 +17,13 @@ const Sidepanel = (props) => {
     useEffect(() => {
         const timer = setInterval(getChats, 1000);
         return () => clearInterval(timer);
+        getChats()
       }, []);
     
     useEffect(() => {
         const timer = setInterval(getrequests, 2000);
         return () => clearInterval(timer);
+        getrequests()
       }, []);
 
     const user = localStorage.getItem('user')
@@ -86,6 +88,17 @@ const Sidepanel = (props) => {
     
     }
 
+    let navigate = useNavigate()
+
+    let redirect = ()  => {
+     
+        props.logout('null')
+        console.log('redirected')
+        return navigate('/')
+          
+      
+      }
+
     
   return (
     <div className="col-md-4 col-xl-3 chat"><div className="card mb-sm-3 mb-md-0 contacts_card">
@@ -110,7 +123,7 @@ const Sidepanel = (props) => {
                 <Link to={"/chats"}>Chats</Link>
             </div>
             <div className='controlschild'>
-                <Link to={"/"} onClick={props.logout}>Logout</Link>
+                <Link to={"/"} onClick={redirect}>Logout</Link>
             </div>
         </div>
    
@@ -129,7 +142,7 @@ const Sidepanel = (props) => {
                 :
                     <>
                     {chats.map(chat =>
-                        <Link to={`/Chat/${chat.id}/${chatWith(chat)}`} key={chat.id}>
+                        <Link to={`/chat/${chat.id}/${chatWith(chat)}`} key={chat.id}>
                             <li className="active">
                                 <div className="d-flex bd-highlight">
                                     <div className="img_cont">

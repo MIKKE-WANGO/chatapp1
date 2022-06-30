@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState , useEffect} from 'react';
 import {
-    Link
+    Link, useNavigate
   } from "react-router-dom";
   
 
@@ -51,6 +51,17 @@ const Requests = (props) => {
         window.alert("Request accepted")
         
     }
+
+    let navigate = useNavigate()
+
+    let redirect = ()  => {
+     
+        props.logout('null')
+        console.log('redirected')
+        return navigate('/')
+          
+      
+      }
     
     
   return (
@@ -72,7 +83,7 @@ const Requests = (props) => {
                         <Link to={"/chats"}>Chats</Link>
                     </div>
                     <div className='controlschild'>
-                        <Link to={"/"} onClick={props.logout}>Logout</Link>
+                        <Link to={"/"} onClick={redirect}>Logout</Link>
                     </div>
                 </div>
    

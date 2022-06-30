@@ -33,6 +33,7 @@ class ChatConsumer(WebsocketConsumer):
 
     user_id = None
 
+
     def fetch_messages(self, data):
         messages = last_15_messages(data['chatId'])
         content = {
@@ -74,9 +75,34 @@ class ChatConsumer(WebsocketConsumer):
         return self.send_chat_message(content)
     
 
+    def typing(self,data):
+        username = data['from']
+        chatId = data['chatId']
+        user = User.objects.get(username=username)
+        if auth_test(chatId, user.id):
+            content = {
+                'user': username,
+                'to':'typing'
+            }
+            return self.send_chat_message(content)
+        
+    def video_call(self,data):
+        username = data['from']
+        chatId = data['chatId']
+        user = User.objects.get(username=username)
+        if auth_test(chatId, user.id):
+            content = {
+            'user': username,
+            'to':'calling'
+            }
+            return self.send_chat_message(content)
+    
+
     commands = {
         'fetch_messages': fetch_messages,
         'new_message': new_message,
+        'typing': typing,
+        'video_calling': video_call
         
     }
 
