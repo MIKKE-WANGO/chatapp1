@@ -90,8 +90,8 @@ background-color: rgba(0,0,0,0.3) !important;
   background-color: rgba(0,0,0,0.3);
 }
 .user_img{
-  height: 70px;
-  width: 70px;
+  height: 60px;
+  width: 60px;
   border:1.5px solid #f5f6fa;
 
 }
@@ -103,12 +103,12 @@ background-color: rgba(0,0,0,0.3) !important;
 }
 .img_cont{
   position: relative;
-  height: 70px;
-  width: 70px;
+  height: 60px;
+  width: 60px;
 }
 .img_cont_msg{
-  height: 40px;
-  width: 40px;
+  height: 35px;
+  width: 35px;
 }
 .online_icon{
 position: absolute;
@@ -161,7 +161,7 @@ color: rgba(255,255,255,0.6);
 }
 
 .video_cam{
-margin-left: 50px;
+margin-left: 1px;
 margin-top: 5px;
 }
 
@@ -169,13 +169,14 @@ margin-top: 5px;
 color: white;
 font-size: 20px;
 cursor: pointer;
-margin-right: 50px;
+margin-right: 3px;
 }
 
 .msg_cotainer{
   display: block;
   margin-left: 10px;
   text-align: center;
+  max-width: 75%;
  
 }
 
@@ -183,7 +184,7 @@ margin-right: 50px;
   margin-right: 10px;
   
   display: block;
- 
+  max-width: 75%;
   text-align: center;
 }
 
@@ -342,7 +343,42 @@ button:hover{
 }
 
 
+.calling{
+  position: absolute;
+  z-index: 10;
+  width: 150px;
+  margin: auto;
+  
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  height: 150px;
+  background-color: white;
+  text-align: center;
+}
+.calling p{
+  font-size: 14px;
+  padding: 5px;
+}
 
+.calling a{
+  font-size: 30px;
+ 
+}
+
+.grow{
+  
+  animation: center-animate 0.8s linear infinite alternate;
+
+}
+@keyframes center-animate {
+  0% {
+      transform: scale(1.4);
+  }
+  100% {
+      transform: scale(1);
+  }
+}
 
 /* -----ROOM STYLING ------*/
 

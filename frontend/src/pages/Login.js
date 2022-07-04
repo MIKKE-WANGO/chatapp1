@@ -50,7 +50,7 @@ const Login = (props) => {
 
     async function  Loginuser  (formData)  {
         //retrieve refresh and access
-        let response = await fetch('https://chat-wango.herokuapp.com/api/token/', {
+        let response = await fetch(' https://chat-wango.herokuapp.com/api/token/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -82,7 +82,7 @@ const Login = (props) => {
 
       const get_user = async () => {
         if (localStorage.getItem('access')){
-          let response = await fetch('https://chat-wango.herokuapp.com/chat/user-details', {
+          let response = await fetch(' https://chat-wango.herokuapp.com/chat/user-details', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',            

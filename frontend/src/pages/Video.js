@@ -46,7 +46,14 @@ const Video = (props) => {
     },[remoteUsers]);
     
   
-
+    const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(socketUrl+"?token=" + localStorage.getItem('access'), {
+        onOpen: () =>  sendJsonMessage({command:'video_calling', chatId:chatUrl.id, from:user1}) ,
+        onClose: () => console.log('video ws closed') ,
+        share: true,
+    
+        //Will attempt to reconnect on all close events, such as server shutting down
+        shouldReconnect: (closeEvent) => true,
+        });
         
     let joinAndDisplayLocalStream = async () => {
 
@@ -75,7 +82,7 @@ const Video = (props) => {
         document.getElementById('video-streams').insertAdjacentHTML('beforeend', player)
         localTracks[1].play(`user-${userid}`)
         await client.publish([localTracks[0], localTracks[1]])
-        console.log('in dont know')
+        
     }
 
 
@@ -115,15 +122,23 @@ const Video = (props) => {
     
     let navigate = useNavigate()
 
-    let leaveAndRemoveLocalStream = async () => {
+    let leaveAndRemoveLocalStream = async (e) => {
         console.log('leave stream')
-        client.removeAllListeners();
-        localTracks[0].close();
-        localTracks[1].close();
-
+        //client.removeAllListeners();
+        //localTracks[0].close();
+        //localTracks[1].close();
+        
         await client.leave()
-
-        navigate(`/chat/${chatUrl.id}/${username.username}`)
+        for (let i=0; localTracks.length > i; i++){
+            
+            localTracks[i].stop()
+            localTracks[i].close()
+        }
+    
+        //await client.leave()
+        
+        window.open(`/chat/${chatUrl.id}/${username.username}`, '_self')
+        //navigate(`/chat/${chatUrl.id}/${username.username}`)
     }
 
       
@@ -150,14 +165,7 @@ const Video = (props) => {
 
 
 
-    const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(socketUrl+"?token=" + localStorage.getItem('access'), {
-    onOpen: () =>  sendJsonMessage({command:'video_calling', chatId:chatUrl.id, from:username.username}) ,
-    onClose: () => console.log('video ws closed') ,
-    share: true,
-
-    //Will attempt to reconnect on all close events, such as server shutting down
-    shouldReconnect: (closeEvent) => true,
-    });
+    
     
         
     useEffect(() => {
@@ -210,7 +218,7 @@ const Video = (props) => {
                     </div>
 
                     <div className="icon-wrapper">
-                         <img onClick={e => leaveAndRemoveLocalStream()} className="control-icon" id="leave-btn" src={leave} />
+                         <img onClick={e => leaveAndRemoveLocalStream(e)} className="control-icon" id="leave-btn" src={leave} />
 
                     </div>
 

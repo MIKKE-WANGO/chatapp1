@@ -147,7 +147,7 @@ const Sidepanel = (props) => {
                                 <div className="d-flex bd-highlight">
                                     <div className="img_cont">
                                         <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" className="rounded-circle user_img"/>
-                                        <span className="online_icon"></span>
+                                        {chat.unread_user_status === 'Online'?<span className="online_icon"></span>: <span className="online_icon offline"></span>}
                                     </div>
                                     <div className="user_info">
                                         { chat.count>0
@@ -162,7 +162,7 @@ const Sidepanel = (props) => {
                                         { chat.sent === localStorage.getItem('user')
                                             ?
                                             <>
-                                            { chat.status === 'Unread' ?
+                                            { chat.msg_status === 'Unread' ?
                                             <p>{<i className="fas fa-check-double" style={{fontSize:'10px', marginRight:'5px',color:'grey'}}></i>}{getContent(chat.latest)}</p>
                                             :
                                             <p>{<i className="fas fa-check-double" style={{fontSize:'10px', marginRight:'5px',color:'skyblue'}}></i>}{getContent(chat.latest)}</p>

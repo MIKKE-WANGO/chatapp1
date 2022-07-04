@@ -21,7 +21,7 @@ import useWebSocket, { ReadyState } from 'react-use-websocket';
 
 function App() {
 
-  const [socketUrl, setSocketUrl] = useState(`ws://127.0.0.1:8000/connect/`);
+  const [socketUrl, setSocketUrl] = useState(`wss://chat-wango.herokuapp.com/connect/`);
  
   const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(socketUrl+"?token=" + localStorage.getItem('access'), {
     //onOpen: () =>  sendJsonMessage({command:'connect', username:localStorage.getItem('user')}) ,

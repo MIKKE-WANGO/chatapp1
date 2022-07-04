@@ -141,16 +141,20 @@ class ChatListView(ListAPIView):
             username1=query.user1.username
             username2 = query.user2.username
             unread_user = ''
+
             if(query.user1 != user):
                 unread_user = query.user1
+                unread_user_status = unread_user.status
             else:
                 unread_user = query.user2
+                unread_user_status = unread_user.status
+       
 
             unread_count = Message.objects.filter(chat=query, status='Unread', user=unread_user).count()
             try:
                 last_message = Message.objects.filter(chat=query).latest("timestamp")
                 sent_by = last_message.user.username
-                status = last_message.status
+                msg_status = last_message.status
                 last_message = last_message.content
            
           
@@ -161,7 +165,7 @@ class ChatListView(ListAPIView):
                 status = ''
                 last_message = ''
             
-            chats.append({"id":query.id, "chat_updated":query.chat_updated, "user1":username1, "user2":username2, 'count':unread_count, 'latest':last_message, 'status':status, 'sent':sent_by})
+            chats.append({"id":query.id, "chat_updated":query.chat_updated, "user1":username1, "user2":username2, 'count':unread_count, 'latest':last_message, 'msg_status':msg_status,'unread_user_status':unread_user_status, 'sent':sent_by})
         
         return Response(chats)
 

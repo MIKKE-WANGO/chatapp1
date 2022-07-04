@@ -51,6 +51,8 @@ const Chat = (props) => {
       } 
 
       else if(lastJsonMessage.to == 'calling' && lastJsonMessage.user != user){
+        
+        
         if(calling === false){
           setCalling(true)
           console.log('calling')
@@ -81,8 +83,8 @@ const Chat = (props) => {
   }, [messageHistory])
 
   useEffect(() => {
-    const timer = setInterval(getStatus, 2000);
-    return () => clearInterval(timer);
+    //const timer = setInterval(getStatus, 2000);
+    //return () => clearInterval(timer);
     getStatus()
   }, []);
 
@@ -101,7 +103,7 @@ const Chat = (props) => {
   const callTimer = () => {
     setTimeout(() => {
       setCalling(false)
-    }, 10000);
+    }, 15000);
    
   }
 
@@ -201,19 +203,20 @@ const getStatus = async () => {
           <div className="card-header msg_head">
             <div className="d-flex bd-highlight">
               <div className="img_cont" >
-                <Link style={{fontSize:'25px', color:'white', marginRight:'13px'}} to={"/chats"}><span><i className="fas fa-arrow-left"></i></span></Link>              
+                <Link style={{fontSize:'27px', color:'white', marginRight:'2px'}} to={"/chats"}><span><i className="fas fa-arrow-left"></i></span></Link>              
               </div>
 
               <div className="img_cont">
                 <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" className="rounded-circle user_img"/>
-                <span className="online_icon"></span>
+                {status === 'Online' ? <span className="online_icon "></span>:<span className="online_icon offline"></span>}
               </div>
               <div className="user_info">
                 <span style={{width:'100%'}}>{username.username}</span>
                 {typing 
                   ?
                     <p>typing...</p>
-                  : <p>{status}</p>}
+                  : <p>{status}</p>
+                }
 
               </div>
               <div className="video_cam">
@@ -277,6 +280,17 @@ const getStatus = async () => {
           </form>
         </div>
       </div>
+
+      {calling ?
+      <div className='calling'>
+              <p>Incoming video call from {username.username}</p>
+              <div className='grow'>
+                <Link to={`/video/${chatUrl.id}/${username.username}`}><i className="fas fa-video"></i></Link>
+              </div>
+      </div> : <div></div>
+
+      }
+
    
    </> 
   )
