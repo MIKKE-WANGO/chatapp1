@@ -147,12 +147,15 @@ position: relative;
   position: absolute;
   right: 0;
   background-color: #4cd137;
-  width: 20px;
+  width: 19px;
  
   color: black;
+  font-weight: bold;
   text-align: center;
+  padding: auto;
   border-radius: 50%;
-  height: 100%;
+  font-size: 13px;
+  height: 19px;
 }
 
 .user_info p{
