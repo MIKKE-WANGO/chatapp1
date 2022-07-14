@@ -160,7 +160,7 @@ class ChatListView(ListAPIView):
           
             except:
                 last_message = ''
-
+                msg_status = ''
                 sent_by = ''
                 status = ''
                 last_message = ''
